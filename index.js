@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 const inquirer = require("inquirer");
+require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -12,51 +13,101 @@ var connection = mysql.createConnection({
 
     // Your password
     password: "password",
-    database: "employeeTracker_db;"
+    database: "employeeTracker_db"
 });
 
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
-    chartQuestion();
+    mainMenu();
 });
 
-function chartQuestion(){
+function mainMenu() {
     inquirer.prompt([
         {
-            name:"choice",
+            name: "action",
+            type: "list",
             message: "What would you like to do?",
-            choices:["View All Employees", "View All Employees By Department","View All Employees By Manager", "Add Employee", "Remove Employee", "Update Employee Role", "Update Employee Manager"]
-        },
-        {
-            name: ""
-        }
-    ])
-}
+            choices: ["View All Employees",
+                "Add Employee",
+                "View All Roles",
+                "Add Role",
+               "View All Departments",
+                "Add Department",
+                "Update Employee Role",,
+                "Quit"
+            ]
+        }]).then(function (answer) {
+            switch (answer.action) {
+                case "View All Employees":
+                    connection.query("SELECT employee.id, employee.first_name, employee.last_name, title, department_name department, CONCAT(manager.first_name,' ',manager.last_name) Manager, salary FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id",
+                        function (err, data) {
+                            if (err) {
+                                throw err;
+                            }
+                            console.table(data);
+                            mainMenu();
+                        });
+                    break;
 
-// Build a command-line application that at a minimum allows the user to:
+                case "Add Employee":
+                    connection.query(
 
-//   * Add departments, roles, employees
+                    )
 
-//   * View departments, roles, employees
+                    inquirer.prompt([
+                        {
+                            name: "first_name",
+                            type: "input",
+                            message: "What is the first name of the employee you'd like to add?"
 
-//   * Update employee roles
+                        },
+                        {
+                            name: "last_name",
+                            type: "input",
+                            message: "What is the last name of the employee you'd like to add?"
+                        },
+                        {
+                            name: "title",
+                            type: "input",
+                            message: "What is the title of the employee you'd like to add?"
+                        },
+                        {
+                            name: "department",
+                            type: "input",
+                            message: "What department will this employee be working in?"
+                        },
 
-// Bonus points if you're able to:
+                    ])
+                    break;
 
-//   * Update employee managers
+                case "View All Roles":
+                    connection.query("SELECT role.id, role.title, role.salary, department.department_name AS department FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.title",
+                    function (err, data) {
+                        if (err) {
+                            throw err;
+                        }
+                        console.table(data);
+                        mainMenu();
+                    });
+                    break;
 
-//   * View employees by manager
+                case "Add Role":
+                    break;
 
-//   * Delete departments, roles, and employees
+                case "View All Departments":
+                    break;
 
-//   * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
+                case "Add Department":
+                    break;
 
-USE employeeTracker_db;
- SELECT employee.id,employee.first_name,employee.last_name,title,department_name department, CONCAT( manager.first_name," ", manager.last_name ) Manager,salary FROM employee 
- LEFT JOIN role  ON employee.role_id=role.id
- LEFT JOIN department ON role.department_id=department.id 
- LEFT JOIN employee manager ON manager.id=employee.manager_id
- ;
+                case "Update Employee Role":
+                    break;
 
- connection.end;
+                case "Quit":
+                    connection.end();
+                    break;
+            }
+
+        })
+};

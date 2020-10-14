@@ -138,3 +138,9 @@ You are required to submit the following:
 
 - - -
 © 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+
+
+SELECT employee.id, employee.first_name, employee.last_name, title, department_name department, CONCAT(manager.first_name, " ", manager.last_name) Manager, salary FROM employee
+            LEFT JOIN role  ON employee.role_id = role.id
+            LEFT JOIN department ON role.department_id = department.id
+            LEFT JOIN employee manager ON manager.id = employee.manager_id

@@ -11,11 +11,9 @@ INSERT INTO role (title, salary, department_id) VALUES('Sales Represenative', 40
 INSERT INTO role (title, salary, department_id) VALUES('Software Developer', 60000.00, 3);
 INSERT INTO role (title, salary, department_id) VALUES('Payroll Clerk', 25000.00, 4);
 
-INSERT INTO employee (first_name, last_name, role_id) VALUES ('Joe', 'Harris', 4);
-INSERT INTO employee (first_name, last_name, role_id) VALUES ('Phil', 'Jurrasic', 2);
-INSERT INTO employee (first_name, last_name, role_id) VALUES ('Jane', 'Morgan', 1);
-INSERT INTO employee (first_name, last_name, role_id) VALUES ('Glen', 'Alexander', 3);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Joe', 'Harris', 4, 3);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Phil', 'Jurrasic', 2, 3);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Jane', 'Morgan', 1);
+INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('Glen', 'Alexander', 3, 3);
 
 
-
---I manually entered the manager ids on the server
