@@ -32,15 +32,15 @@ function mainMenu() {
                 "Add Employee",
                 "View All Roles",
                 "Add Role",
-               "View All Departments",
+                "View All Departments",
                 "Add Department",
-                "Update Employee Role",,
+                "Update Employee Role", ,
                 "Quit"
             ]
         }]).then(function (answer) {
             switch (answer.action) {
                 case "View All Employees":
-                    connection.query("SELECT employee.id, employee.first_name, employee.last_name, title, department_name department, CONCAT(manager.first_name,' ',manager.last_name) Manager, salary FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id",
+                    connection.query("SELECT employee.id, employee.first_name, employee.last_name, title, department_name department, CONCAT(manager.first_name,' ',manager.last_name) manager, salary FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id",
                         function (err, data) {
                             if (err) {
                                 throw err;
@@ -51,10 +51,6 @@ function mainMenu() {
                     break;
 
                 case "Add Employee":
-                    connection.query(
-
-                    )
-
                     inquirer.prompt([
                         {
                             name: "first_name",
@@ -77,19 +73,46 @@ function mainMenu() {
                             type: "input",
                             message: "What department will this employee be working in?"
                         },
+                        {
+                            name: "manager",
+                            type: "input",
+                            message: "What is their manager role id?"
+                        },
+                        {
+                            name: "salary",
+                            type: "input",
+                            message: "What is their salary?"
+                        }
+                        // left join for title? from role table? can i insert into and select?
 
-                    ])
+                    ]).then(function (answers) {
+                        connection.query("INSERT INTO employee set ?", {
+                            first_name: answers.first_name,
+                            last_name: answers.last_name,
+                            title: answers.title,
+                            department: answers.department,
+                            manager: answers.manager,
+                            salary: answers.salary
+                        }, function (err, data) {
+                            if (err) {
+                                throw err;
+                            }
+                            console.table(data);
+                            mainMenu();
+
+                        });
+                    });
                     break;
 
                 case "View All Roles":
                     connection.query("SELECT role.id, role.title, role.salary, department.department_name AS department FROM role LEFT JOIN department ON role.department_id = department.id ORDER BY role.title",
-                    function (err, data) {
-                        if (err) {
-                            throw err;
-                        }
-                        console.table(data);
-                        mainMenu();
-                    });
+                        function (err, data) {
+                            if (err) {
+                                throw err;
+                            }
+                            console.table(data);
+                            mainMenu();
+                        });
                     break;
 
                 case "Add Role":
