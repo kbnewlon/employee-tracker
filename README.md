@@ -107,40 +107,7 @@ How do you deliver this? Here are some guidelines:
 
   * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
 
-## Commit Early and Often
-
-One of the most important skills to master as a web developer is version control. Building the habit of committing via Git is important for two reasons:
-
-* Your commit history is a signal to employers that you are actively working on projects and learning new skills.
-
-* Your commit history allows you to revert your codebase in the event that you need to return to a previous state.
-
-Follow these guidelines for committing:
-
-* Make single-purpose commits for related changes to ensure a clean, manageable history. If you are fixing two issues, make two commits.
-
-* Write descriptive, meaningful commit messages so that you and anyone else looking at your repository can easily understand its history.
-
-* Don't commit half-done work, for the sake of your collaborators (and your future self!).
-
-* Test your application before you commit to ensure functionality at every step in the development process.
-
-We would like you to have well over 200 commits by graduation, so commit early and often!
 
 
-## Submission on BCS
-
-You are required to submit the following:
-
-* The URL of the GitHub repository
-
-* A video demonstrating the entirety of the app's functionality 
-
-- - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
 
 
-SELECT employee.id, employee.first_name, employee.last_name, title, department_name department, CONCAT(manager.first_name, " ", manager.last_name) Manager, salary FROM employee
-            LEFT JOIN role  ON employee.role_id = role.id
-            LEFT JOIN department ON role.department_id = department.id
-            LEFT JOIN employee manager ON manager.id = employee.manager_id
